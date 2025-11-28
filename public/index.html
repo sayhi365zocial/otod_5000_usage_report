@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="th" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEPA OTOD Voucher</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 221.2 83.2% 53.3%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 55%, 85%, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(240, 100%, 95%, 0.3) 0px, transparent 50%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 42rem;
+        }
+
+        .card {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.025em;
+            color: hsl(var(--foreground));
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--foreground));
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: hsl(var(--foreground));
+            background-color: hsl(var(--background));
+            border: 1px solid hsl(var(--input));
+            border-radius: calc(var(--radius) - 2px);
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: hsl(var(--ring));
+            box-shadow: 0 0 0 3px hsla(var(--ring), 0.1);
+        }
+
+        input::placeholder {
+            color: hsl(var(--muted-foreground));
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            height: 2.5rem;
+            padding: 0 1rem;
+            border-radius: calc(var(--radius) - 2px);
+            transition: all 0.15s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+
+        .button-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .button-primary:hover:not(:disabled) {
+            background-color: hsl(var(--primary) / 0.9);
+        }
+
+        .button-outline {
+            background-color: transparent;
+            border: 1px solid hsl(var(--input));
+            color: hsl(var(--foreground));
+        }
+
+        .button-outline:hover:not(:disabled) {
+            background-color: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .alert {
+            display: none;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: calc(var(--radius) - 2px);
+            font-size: 0.875rem;
+            border: 1px solid;
+        }
+
+        .alert-success {
+            background-color: hsl(142.1 76.2% 96.3%);
+            border-color: hsl(142.1 76.2% 85%);
+            color: hsl(142.1 70.6% 45.3%);
+        }
+
+        .alert-error {
+            background-color: hsl(var(--destructive) / 0.1);
+            border-color: hsl(var(--destructive) / 0.3);
+            color: hsl(var(--destructive));
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .spinner {
+            border: 3px solid hsl(var(--muted));
+            border-top: 3px solid hsl(var(--primary));
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: hsl(var(--muted));
+            border-radius: calc(var(--radius) - 2px);
+            font-size: 0.813rem;
+            color: hsl(var(--muted-foreground));
+            line-height: 1.6;
+        }
+
+        .note strong {
+            color: hsl(var(--foreground));
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .grid-cols-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        select option {
+            padding: 0.5rem;
+        }
+
+        /* Required asterisk */
+        label::after {
+            content: " *";
+            color: hsl(var(--destructive));
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">DEPA OTOD Voucher</h1>
+                <p class="card-description">ระบบบันทึกการใช้งาน Voucher รายวัน</p>
+            </div>
+
+            <div id="alertBox" class="alert"></div>
+
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 0.75rem; font-size: 0.875rem; color: hsl(var(--muted-foreground));">กำลังบันทึกข้อมูล...</p>
+            </div>
+
+            <form id="usageForm">
+                <div class="form-group">
+                    <label for="accessDate">วันที่ใช้งาน</label>
+                    <input type="date" id="accessDate" name="accessDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="voucherCode">รหัส Voucher</label>
+                    <select id="voucherCode" name="voucherCode" required>
+                        <option value="">กำลังโหลดข้อมูล...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="appUserId">App User ID</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="appUserId" name="appUserId" placeholder="เช่น 2845" required style="flex: 1;">
+                        <button type="button" id="saveAppUserIdBtn" class="button button-outline" style="width: auto; padding: 0 1rem;" onclick="saveAppUserId()">บันทึก ID</button>
+                    </div>
+                    <p id="appUserIdStatus" style="font-size: 0.75rem; margin-top: 0.25rem; color: hsl(var(--muted-foreground));"></p>
+                </div>
+
+                <div class="grid grid-cols-2">
+                    <div class="form-group">
+                        <label for="accessCount">จำนวนครั้ง</label>
+                        <input type="number" id="accessCount" name="accessCount" min="1" placeholder="7" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accessTime">ระยะเวลา (นาที)</label>
+                        <input type="number" id="accessTime" name="accessTime" min="1" placeholder="399" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="button button-primary">บันทึกข้อมูล</button>
+                    <button type="button" class="button button-outline" onclick="checkUsage()">ตรวจสอบการใช้งาน</button>
+                </div>
+            </form>
+
+            <div class="note">
+                <strong>หมายเหตุ</strong><br>
+                • ระบบจะบันทึก lat/lon เป็น 0 โดยอัตโนมัติ<br>
+                • ข้อมูลจะถูกส่งไปยัง DEPA API ทันทีที่กดบันทึก<br>
+                • ปุ่ม "ตรวจสอบการใช้งาน" จะเปิดหน้าต่างใหม่
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://us-central1-otod-voucher.cloudfunctions.net/api';
+        let vouchersData = {}; // เก็บข้อมูล vouchers ทั้งหมด
+
+        document.getElementById('accessDate').valueAsDate = new Date();
+
+        async function loadVouchers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/get-vouchers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pageNumber: 1, pageSize: 500 })
+                });
+                const result = await response.json();
+                const voucherSelect = document.getElementById('voucherCode');
+
+                if (result.success && result.data && result.data.length > 0) {
+                    const activatedVouchers = result.data.filter(v => v.status === 'Activated');
+
+                    if (activatedVouchers.length > 0) {
+                        voucherSelect.innerHTML = '<option value="">-- เลือก Voucher --</option>';
+                        activatedVouchers.forEach(voucher => {
+                            // เก็บข้อมูล voucher ไว้ใช้ภายหลัง
+                            vouchersData[voucher.voucherCode] = voucher;
+
+                            const option = document.createElement('option');
+                            option.value = voucher.voucherCode;
+                            option.textContent = `${voucher.firstName} ${voucher.lastName} - ${voucher.voucherCode}`;
+                            voucherSelect.appendChild(option);
+                        });
+                    } else {
+                        voucherSelect.innerHTML = '<option value="">ไม่พบ Voucher ที่ Activated</option>';
+                    }
+                } else {
+                    voucherSelect.innerHTML = '<option value="">ไม่พบข้อมูล Voucher</option>';
+                }
+            } catch (error) {
+                console.error('Error loading vouchers:', error);
+                document.getElementById('voucherCode').innerHTML = '<option value="">เกิดข้อผิดพลาดในการโหลดข้อมูล</option>';
+            }
+        }
+
+        // เมื่อเลือก voucher ให้ auto-fill appUserId
+        document.getElementById('voucherCode').addEventListener('change', function() {
+            const voucherCode = this.value;
+            const appUserIdInput = document.getElementById('appUserId');
+            const statusText = document.getElementById('appUserIdStatus');
+
+            if (voucherCode && vouchersData[voucherCode]) {
+                const voucher = vouchersData[voucherCode];
+                if (voucher.appUserId) {
+                    appUserIdInput.value = voucher.appUserId;
+                    statusText.textContent = `✓ โหลดจากระบบ`;
+                    statusText.style.color = 'hsl(142.1 70.6% 45.3%)';
+                } else {
+                    appUserIdInput.value = '';
+                    statusText.textContent = 'ยังไม่มี App User ID ในระบบ กรุณาบันทึก';
+                    statusText.style.color = 'hsl(var(--muted-foreground))';
+                }
+            } else {
+                appUserIdInput.value = '';
+                statusText.textContent = '';
+            }
+        });
+
+        // ฟังก์ชันบันทึก appUserId
+        async function saveAppUserId() {
+            const voucherCode = document.getElementById('voucherCode').value;
+            const appUserId = document.getElementById('appUserId').value;
+            const statusText = document.getElementById('appUserIdStatus');
+
+            if (!voucherCode) {
+                showAlert('กรุณาเลือก Voucher ก่อน', 'error');
+                return;
+            }
+
+            if (!appUserId) {
+                showAlert('กรุณากรอก App User ID', 'error');
+                return;
+            }
+
+            try {
+                const voucher = vouchersData[voucherCode];
+                const response = await fetch(`${API_BASE_URL}/save-voucher-mapping`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        voucherCode,
+                        appUserId,
+                        firstName: voucher?.firstName || '',
+                        lastName: voucher?.lastName || '',
+                        productName: voucher?.productName || ''
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // อัพเดทข้อมูลใน vouchersData
+                    if (vouchersData[voucherCode]) {
+                        vouchersData[voucherCode].appUserId = appUserId;
+                    }
+                    statusText.textContent = '✓ บันทึกสำเร็จ';
+                    statusText.style.color = 'hsl(142.1 70.6% 45.3%)';
+                    showAlert('✓ บันทึก App User ID สำเร็จ!', 'success');
+                } else {
+                    showAlert('✗ เกิดข้อผิดพลาด: ' + result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('✗ เกิดข้อผิดพลาดในการบันทึก', 'error');
+            }
+        }
+
+        window.addEventListener('load', loadVouchers);
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+            setTimeout(() => alertBox.style.display = 'none', 5000);
+        }
+
+        document.getElementById('usageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const loading = document.getElementById('loading');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            try {
+                loading.style.display = 'block';
+                submitBtn.disabled = true;
+
+                const formData = {
+                    accessDate: document.getElementById('accessDate').value,
+                    voucherCode: document.getElementById('voucherCode').value,
+                    appUserId: document.getElementById('appUserId').value,
+                    accessCount: document.getElementById('accessCount').value,
+                    accessTime: document.getElementById('accessTime').value
+                };
+
+                const response = await fetch(`${API_BASE_URL}/submit-usage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlert('✓ บันทึกข้อมูลสำเร็จ!', 'success');
+                    document.getElementById('accessCount').value = '';
+                    document.getElementById('accessTime').value = '';
+                    document.getElementById('accessDate').valueAsDate = new Date();
+                } else {
+                    showAlert('✗ เกิดข้อผิดพลาด: ' + result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('✗ เกิดข้อผิดพลาดในการเชื่อมต่อ', 'error');
+            } finally {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+
+        function checkUsage() {
+            const voucherCode = document.getElementById('voucherCode').value;
+            if (!voucherCode) {
+                showAlert('กรุณาระบุรหัส Voucher ก่อน', 'error');
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+                .toISOString().split('T')[0];
+
+            window.open(`check-usage.html?voucherCode=${voucherCode}&fromDate=${firstDayOfMonth}&toDate=${today}`, '_blank');
+        }
+    </script>
+</body>
+</html>

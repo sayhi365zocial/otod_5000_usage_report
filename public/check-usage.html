@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="th" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตรวจสอบการใช้งาน Voucher - DEPA OTOD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 221.2 83.2% 53.3%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 1rem;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 55%, 85%, 0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(240, 100%, 95%, 0.3) 0px, transparent 50%);
+        }
+
+        .container {
+            max-width: 70rem;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.025em;
+            color: hsl(var(--foreground));
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            height: 2.5rem;
+            padding: 0 1rem;
+            border-radius: calc(var(--radius) - 2px);
+            transition: all 0.15s;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .button-outline {
+            background-color: transparent;
+            border: 1px solid hsl(var(--input));
+            color: hsl(var(--foreground));
+        }
+
+        .button-outline:hover {
+            background-color: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+
+        .button-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .button-primary:hover:not(:disabled) {
+            background-color: hsl(var(--primary) / 0.9);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: hsl(var(--muted));
+            padding: 1rem;
+            border-radius: calc(var(--radius) - 2px);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+        }
+
+        .filter-section {
+            background-color: hsl(var(--muted));
+            padding: 1.5rem;
+            border-radius: calc(var(--radius) - 2px);
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--foreground));
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            color: hsl(var(--foreground));
+            background-color: hsl(var(--background));
+            border: 1px solid hsl(var(--input));
+            border-radius: calc(var(--radius) - 2px);
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: hsl(var(--ring));
+            box-shadow: 0 0 0 3px hsla(var(--ring), 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem;
+            font-weight: 600;
+            background-color: hsl(var(--muted));
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        tr:hover {
+            background-color: hsl(var(--muted) / 0.5);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid hsl(var(--muted));
+            border-top: 3px solid hsl(var(--primary));
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: calc(var(--radius) - 2px);
+            font-size: 0.875rem;
+            border: 1px solid;
+        }
+
+        .alert-error {
+            background-color: hsl(var(--destructive) / 0.1);
+            border-color: hsl(var(--destructive) / 0.3);
+            color: hsl(var(--destructive));
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: hsl(var(--muted-foreground));
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">ตรวจสอบการใช้งาน Voucher</h1>
+                <a href="index.html" class="button button-outline">← กลับหน้าหลัก</a>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="voucherCode">รหัส Voucher</label>
+                        <select id="voucherCode">
+                            <option value="">กำลังโหลดข้อมูล...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fromDate">จากวันที่</label>
+                        <input type="date" id="fromDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="toDate">ถึงวันที่</label>
+                        <input type="date" id="toDate">
+                    </div>
+                </div>
+                <button id="searchBtn" class="button button-primary" style="width: 100%;">ค้นหา</button>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 0.75rem; font-size: 0.875rem; color: hsl(var(--muted-foreground));">กำลังโหลดข้อมูล...</p>
+            </div>
+
+            <div id="content" style="display: none;">
+                <div class="stats-grid" id="statsGrid"></div>
+                <div id="dataContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://us-central1-otod-voucher.cloudfunctions.net/api';
+
+        // โหลดรายการ Voucher
+        async function loadVouchers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/get-vouchers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pageNumber: 1, pageSize: 500 })
+                });
+                const result = await response.json();
+                const voucherSelect = document.getElementById('voucherCode');
+
+                if (result.success && result.data && result.data.length > 0) {
+                    const activatedVouchers = result.data.filter(v => v.status === 'Activated');
+
+                    if (activatedVouchers.length > 0) {
+                        voucherSelect.innerHTML = '<option value="">-- เลือก Voucher --</option>';
+                        activatedVouchers.forEach(voucher => {
+                            const option = document.createElement('option');
+                            option.value = voucher.voucherCode;
+                            option.textContent = `${voucher.firstName} ${voucher.lastName} - ${voucher.voucherCode}`;
+                            voucherSelect.appendChild(option);
+                        });
+
+                        // ถ้ามี voucherCode จาก URL ให้เลือกอัตโนมัติ
+                        const params = new URLSearchParams(window.location.search);
+                        if (params.get('voucherCode')) {
+                            voucherSelect.value = params.get('voucherCode');
+                        }
+                    } else {
+                        voucherSelect.innerHTML = '<option value="">ไม่พบ Voucher ที่ Activated</option>';
+                    }
+                } else {
+                    voucherSelect.innerHTML = '<option value="">ไม่พบข้อมูล Voucher</option>';
+                }
+            } catch (error) {
+                console.error('Error loading vouchers:', error);
+                document.getElementById('voucherCode').innerHTML = '<option value="">เกิดข้อผิดพลาดในการโหลดข้อมูล</option>';
+            }
+        }
+
+        function initializeDates() {
+            const params = new URLSearchParams(window.location.search);
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            document.getElementById('fromDate').value = params.get('fromDate') ||
+                firstDayOfMonth.toISOString().split('T')[0];
+            document.getElementById('toDate').value = params.get('toDate') ||
+                today.toISOString().split('T')[0];
+
+            // โหลด Vouchers ก่อน
+            loadVouchers().then(() => {
+                // โหลดข้อมูลถ้ามี voucher code
+                if (params.get('voucherCode')) {
+                    loadUsageData();
+                }
+            });
+        }
+
+        async function loadUsageData() {
+            const voucherCode = document.getElementById('voucherCode').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            if (!voucherCode || !fromDate || !toDate) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('content');
+            const dataContainer = document.getElementById('dataContainer');
+
+            try {
+                loading.style.display = 'block';
+                content.style.display = 'none';
+
+                const response = await fetch(`${API_BASE_URL}/get-usage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ voucherCode, fromDate, toDate })
+                });
+
+                const result = await response.json();
+
+                loading.style.display = 'none';
+                content.style.display = 'block';
+
+                if (result.success && result.data && result.data.length > 0) {
+                    displayStats(voucherCode, fromDate, toDate, result.data);
+                    displayTable(result.data);
+                } else {
+                    dataContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <h3>ไม่พบข้อมูลการใช้งาน</h3>
+                            <p>ไม่พบข้อมูลการใช้งานในช่วงเวลาที่ระบุ</p>
+                        </div>
+                    `;
+                    document.getElementById('statsGrid').innerHTML = '';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                loading.style.display = 'none';
+                content.style.display = 'block';
+                dataContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        เกิดข้อผิดพลาดในการโหลดข้อมูล: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function displayStats(voucherCode, fromDate, toDate, data) {
+            const totalAccess = data.reduce((sum, item) => sum + (item.accessCount || 0), 0);
+            const totalTime = data.reduce((sum, item) => sum + (item.accessTime || 0), 0);
+            const totalHours = Math.round(totalTime / 60 * 10) / 10;
+
+            const statsHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Voucher Code</div>
+                    <div class="stat-value">${voucherCode}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">จำนวนวัน</div>
+                    <div class="stat-value">${data.length}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">จำนวนครั้งรวม</div>
+                    <div class="stat-value">${totalAccess}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">เวลารวม</div>
+                    <div class="stat-value">${totalHours} ชม.</div>
+                </div>
+            `;
+
+            document.getElementById('statsGrid').innerHTML = statsHTML;
+        }
+
+        function displayTable(data) {
+            const tableHTML = `
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>วันที่</th>
+                                <th>App User ID</th>
+                                <th>จำนวนครั้ง</th>
+                                <th>ระยะเวลา (นาที)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.map(item => `
+                                <tr>
+                                    <td>${item.accessDate || '-'}</td>
+                                    <td>${item.appUserId || '-'}</td>
+                                    <td>${item.accessCount || 0}</td>
+                                    <td>${item.accessTime || 0}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            document.getElementById('dataContainer').innerHTML = tableHTML;
+        }
+
+        // Event listeners
+        document.getElementById('searchBtn').addEventListener('click', loadUsageData);
+
+        // กด Enter ในฟิลด์ date เพื่อค้นหา
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    loadUsageData();
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('load', initializeDates);
+    </script>
+</body>
+</html>

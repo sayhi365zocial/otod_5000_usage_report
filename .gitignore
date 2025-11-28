@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+functions/node_modules/
+
+# Environment variables
+.env
+functions/.env
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+*.log
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
